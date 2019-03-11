@@ -16,6 +16,7 @@ module Database.Esqueleto.PostgreSQL
   , stringAgg
   , stringAggWith
   , maybeArray
+  , (@@.)
   , chr
   , now_
   , random_
@@ -160,6 +161,16 @@ stringAgg ::
   -> SqlExpr (Value s) -- ^ Delimiter.
   -> SqlExpr (Value (Maybe s)) -- ^ Concatenation.
 stringAgg expr delim = stringAggWith AggModeAll expr delim []
+-- | Full text search operator.
+--
+-- @since 2.8.0
+(@@.) ::
+     SqlString s
+  => SqlExpr (Value s)
+  -> SqlExpr (Value s)
+  -> SqlExpr (Value Bool)
+(@@.) = unsafeSqlBinOp " @@ "
+
 
 -- | (@chr@) Translate the given integer to a character. (Note the result will
 -- depend on the character set of your database.)
